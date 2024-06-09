@@ -11,7 +11,7 @@ class User {
    * локальном хранилище.
    * */
   static setCurrent(user) {
-    localStorage.user = JSON.stringify(user);
+    localStorage.setItem("user", user);
   }
 
   /**
@@ -38,7 +38,6 @@ class User {
     const options = {
       url: this.URL + "/current",
       data: data,
-      responseType: 'json',
       method: 'GET',
       callback: (err, response) => {
         if (response && response.user) {
@@ -62,7 +61,6 @@ class User {
     const options = {
       url: this.URL + "/login",
       data: data,
-      responseType: 'json',
       method: 'POST',
       callback: (err, response) => {
         if (response && response.user) {
@@ -84,8 +82,7 @@ class User {
     const options = {
       url: this.URL + '/register',
       data: data,
-      responseType: 'json',
-      method: 'POST',
+       method: 'POST',
       callback: (err, response) => {
         if (response && response.user) {
           User.setCurrent(response.user);
@@ -104,7 +101,7 @@ class User {
     const options = {
       url: this.URL + '/logout',
       data: data,
-      responseType: 'json',
+      
       method: 'POST',
       callback: (err, response) => {
         if (response && response.user) {

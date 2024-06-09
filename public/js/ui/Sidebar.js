@@ -20,17 +20,10 @@ class Sidebar {
   static initToggleButton() {
     (document.querySelector('.sidebar-toggle')).addEventListener('click', (event) => {
       event.preventDefault();
-      const { target } = event;
-      App.element.classList.toggle('sidebar-open');
-
-      if (target.closest('.sidebar-open')) {
-        App.element.classList.add('.sidebar-collapse');
-      } else {
-        App.element.classList.remove('.sidebar-collapse');
-      }
-
-    });
-  }
+        App.element.classList.toggle('sidebar-open');
+        App.element.classList.toggle('.sidebar-collapse');
+    }
+  )}
 
   /**
    * При нажатии на кнопку входа, показывает окно входа

@@ -14,7 +14,6 @@ class Entity {
       url: this.URL,
       method: 'GET',
       data: data,
-      responseType: 'json',
       callback: callback,
     };
     return createRequest(options);
@@ -30,7 +29,6 @@ class Entity {
     const options = {
       url: this.URL,
       data: objectData,
-      responseType: 'json',
       method: 'POST',
       callback: callback,
     };
@@ -46,8 +44,7 @@ class Entity {
     const options = {
       url: this.URL + "/",
       data: objectData,
-      responseType: 'json',
-      method: "POST",
+       method: "POST",
       callback: callback,
     };
     return createRequest(options);

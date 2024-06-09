@@ -13,13 +13,11 @@ class AsyncForm {
    * через registerEvents()
    * */
   constructor(element) {
-    if (!element) {
-      throw Error('Элемент не найден');
-    }
-
-    this.element = element;
-    this.formData = null;
-    this.registerEvents();
+      if (!element) {
+        throw new Error('Передан пустой element в метод constructor класса Modal!');
+      }
+      this.element = element;
+      this.registerEvents();
   }
 
   /**
@@ -27,12 +25,10 @@ class AsyncForm {
    * вызывает метод submit()
    * */
   registerEvents() {
-    this.element.onsubmit = (event) => {
+    this.element.addEventListener('submit', (event) => {
       event.preventDefault();
-      const { target } = event;
-      this.formData = new FormData(target);
       this.submit();
-    };
+    });
   }
 
   /**
@@ -43,26 +39,14 @@ class AsyncForm {
    * }
    * */
   getData() {
-    const data = {};
-
-    for (let item of this.formData.entries()) {
-      const key = item[0],
-        value = item[1];
-      data[key] = value;
+      const formData = new FormData(this.element);
+      return Object.fromEntries(formData.entries());
     }
-
-    return data;
-  }
-
-  onSubmit(options){
-    getData();
-  }
-
   /**
    * Вызывает метод onSubmit и передаёт туда
    * данные, полученные из метода getData()
    * */
   submit() {
-    this.onSubmit(this.getData(this.formData));
+    getData();
   }
 }
