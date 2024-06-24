@@ -1,6 +1,7 @@
 /**
  * Класс RegisterForm управляет формой
  * регистрации
+ * Наследуется от AsyncForm
  * */
 class RegisterForm extends AsyncForm {
   /**
@@ -9,25 +10,13 @@ class RegisterForm extends AsyncForm {
    * состояние App.setState( 'user-logged' )
    * и закрывает окно, в котором находится форма
    * */
-  onSubmit(data) {
-    User.register(data, response => {
-
-      if (response.success) {
-        App.getForm('register').element.reset();
-        App.setState('user-logged');
-        App.getModal('register').close();
-      } else {
-        App.getForm('register').element.reset();
-        showLoginError();
-
-        function showLoginError() {
-          let div = document.createElement('div');
-          div.className = 'error';
-          div.innerHTML = response.error;
-          App.getForm('register').element.append(div);
-        }
-      }
-    });
-  
+  onSubmit( options ) {
+    User.register(options, (err, response) => {
+      if (err === null && response.success) {
+        App.setState('user-logged'); 
+        App.getModal('register').close(); //закрытие окна
+        this.element.reset();
+      } 
+    })
   }
 }

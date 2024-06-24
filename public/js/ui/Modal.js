@@ -13,7 +13,7 @@ class Modal {
    * */
   constructor(element){
     if (!element) {
-    throw Error('Элемент не найден');
+    throw new Error('Элемент не найден');
   }
   this.element = element;
   this.registerEvents();
@@ -26,9 +26,10 @@ class Modal {
    * (с помощью метода Modal.onClose)
    * */
   registerEvents() {
-    for (let elem of this.element.querySelectorAll('[data-dismiss="modal"]')) {
-      elem.onclick = () => this.onClose();
-    }
+    const btnClose = this.element.querySelectorAll('button[data-dismiss="modal"]');
+    btnClose.forEach(elem => elem.addEventListener('click', (e) => {
+        this.onClose(e);
+    }));
   }
 
   /**
@@ -36,21 +37,20 @@ class Modal {
    * Закрывает текущее окно (Modal.close())
    * */
   onClose(e) {
+    e.preventDefault();
     this.close();
-    this.element.querySelector('.form').reset();
-
-  }
+    }
   /**
    * Открывает окно: устанавливает CSS-свойство display
    * со значением «block»
    * */
   open() {
-    this.element.style.display = 'block';
+    this.element.style.display = `block`;
   }
   /**
    * Закрывает окно: удаляет CSS-свойство display
    * */
   close(){
-    this.element.style.display = '';
+    this.element.style.display = 'none';
   }
 }

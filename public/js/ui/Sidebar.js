@@ -34,35 +34,19 @@ class Sidebar {
    * */
   static initAuthLinks() {
     document.querySelector('.menu-item_login').addEventListener('click', (event) => {
-      event.preventDefault();
       App.getModal('login').open();
-      /* Удаление сообщения об ошибке ввода регистрационных данных в форме "login" */
-      if (App.getForm('login').element.lastElementChild.matches('.error')) {
-        App.getForm('login').element.lastElementChild.remove();
-      }
-
-      App.getForm('login').element.reset();
-    });
+      });
 
     document.querySelector('.menu-item_register').addEventListener('click', (event) => {
-      event.preventDefault();
       App.getModal('register').open();
-      /* Удаление сообщения об ошибке ввода регистрационных данных в форме "register" */
-      if (App.getForm('register').element.lastElementChild.matches('.error')) {
-        App.getForm('register').element.lastElementChild.remove();
-      }
+     });
 
-      App.getForm('register').element.reset();
-    });
-
-    document.querySelector('.menu-item_logout').addEventListener('click', (event) => {
-      event.preventDefault();
-      User.logout(response => {
-
-        if (response.success) {
-          App.setState('init');
+    document.querySelector('.menu-item_logout').addEventListener('click', (e) => {
+      e.preventDefault();
+      User.logout(User.current(), (err, response) => {
+        if (response && response.success) {
+          App.setState(`init`);
         }
-
       });
     });
   }

@@ -1,14 +1,15 @@
 /**
  * Класс CreateTransactionForm управляет формой
  * создания новой транзакции
+ * Наследуется от AsyncForm
  * */
-class CreateTransactionForm extends AsyncForm {
+class CreateTransactionForm extends AsyncForm{
   /**
    * Вызывает родительский конструктор и
    * метод renderAccountsList
    * */
-  constructor(element) {
-    super(element)
+  constructor( element ) {
+    super(element);
     this.renderAccountsList();
   }
 
@@ -17,32 +18,19 @@ class CreateTransactionForm extends AsyncForm {
    * Обновляет в форме всплывающего окна выпадающий список
    * */
   renderAccountsList() {
-    Account.list(null, response => {
-
-      if (response.success) {
-        select.innerHTML= Array.from(response.data).reduce(function(accumulator, item, index, array) {
-          const option = document.createElement("option");
-          option.value = response.data[index].id;
-          option.text = response.data[index].name;
-         // this.element.querySelector('.accounts-select').append(option);
-          accumulator.append(option);
-        }, 0);
-       
-/*
-        for (let elem of this.element.querySelectorAll('select > option')) {
-          if (elem) elem.remove();
+    Account.list({} , (err,response) => {
+      if (err === null) {
+        if (response.success) {
+          const accountSelect = document.querySelector(`#${this.element.id} .accounts-select`);
+          accountSelect.innerHTML = '';
+          response.data.forEach((account) => {
+            accountSelect.insertAdjacentHTML('beforeend', `<option value="${account.id}">${account.name}</option>`);
+          });
+        } else {
+          alert(JSON.stringify(response.error));
         }
-
-        for (let i = 0; i < Array.from(response.data).length; i++) {
-          const option = document.createElement("option");
-          option.value = response.data[i].id;
-          option.text = response.data[i].name;
-          this.element.querySelector('.accounts-select').append(option);
-        }*/
-
       }
     });
-
   }
 
   /**
@@ -51,17 +39,21 @@ class CreateTransactionForm extends AsyncForm {
    * вызывает App.update(), сбрасывает форму и закрывает окно,
    * в котором находится форма
    * */
-  onSubmit(data) {
-
-    Transaction.create(data, response => {
-      if (response.success) {
-        App.update();
-        App.getModal('newExpense').close();
-        App.getModal('newIncome').close();
+  onSubmit( options ) {
+    Transaction.create(options, (err,response) => {
+      if (err === null) {
+        if (response.success) {
+          if (this.element.id === 'new-income-form') {
+            App.getModal('newIncome').close();
+          } else {
+            App.getModal('newExpense').close();
+          }
+          this.element.reset();
+          App.update();
+        } else {
+          alert(JSON.stringify(response.error));
+        }
       }
-    });
-
-    this.element.reset();
-  
+    })
   }
 }
